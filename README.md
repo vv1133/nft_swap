@@ -1,227 +1,26 @@
 # nft_swap
 
-## Project Background
+## Background
 
-Existing NFT trading websites operate using tokens like ETH, USDT, etc., for conducting NFT transactions. When a user possesses an NFT and wishes to trade it for another NFT, they first must sell their current NFT for tokens and then use these tokens to buy the desired NFT. This process is cumbersome for users and incurs additional gas fees.
-The birth of the nft_swap project allows users to directly exchange one NFT for another. In the future, it will also support trading for the desired NFT using one or more NFTs plus tokens.
+With the thriving development of blockchain technology and the widespread popularity of digital art, NFTs, as an emerging form of digital asset, are profoundly transforming the trading landscape of art, gaming, collectibles, and other sectors. However, traditional NFT trading markets are limited by a single buy-and-sell model, making it difficult to fully unleash the vitality and potential of the NFT market.
 
-## Project Introduction
+## Introduction
 
-When users want to sell nft on nft_swap market, they must first place the NFT on the market. Interested buyers then make offers, which can be one or more NFTs or(and) some tokens. Upon receiving an offer, the user can accept or decline it. Once accepted, the transaction is completed.
+NFT Swap is a revolutionary NFT asset trading platform aimed at igniting the vibrancy of the NFT market and delivering an unprecedented trading experience. Beyond standard NFT buying and selling, it innovatively allows users to exchange NFTs for other NFTs, merge multiple NFTs for trading, and trade partial ownership shares of NFTs. NFT Swap is dedicated to maximizing the liquidity and composability of NFT assets, unlocking novel possibilities for NFT trading and fostering the continued prosperity of the NFT ecosystem.
 
-### Content implemented during the mini hackathon
+## Core Features
 
-* Implemented `pallet-nft` and `pallet-nft-market`, along with corresponding test code
-* Developed the webpage frontend
-* Enabled the exchange of one NFT for another
-* Supported transactions using the Polkadot.js wallet, or `//Alice` test account when the wallet is not installed
+- NFT-to-NFT Trading:
 
-### Future Development
+  While traditional NFT markets often limit transactions to NFTs and cryptocurrencies, NFT Swap enables direct swaps between NFTs. Users can exchange their held NFTs for other desired NFTs, or even combine NFTs with cryptocurrencies for flexible trading, significantly broadening trading channels and promoting circulation and interaction within the NFT ecosystem.
 
-* Enable trading one NFT for multiple NFTs
-* Enable trading one NFT for one or more NFTs + tokens
+- NFT Merging & Splitting:
 
-## Installation, Compilation, and Execution
+  We introduce the innovative NFT merging feature, allowing users to combine multiple NFTs with similar or different attributes into a new, higher-value NFT. This not only expands the creative boundaries for NFT creators but also provides investors and collectors with more diversified investment options. Furthermore, users can split the merged NFT back into its original NFTs for trading, further activating the trading activity within the NFT market.
 
-### Substrate
+- NFT Fractional Ownership Trading:
 
-```
-$ cd nft_swap_substrate
-```
-
-#### Compilation
-
-```
-$ cargo build --release
-```
-
-#### Pallet Unit Tests
-
-##### pallet-nft
-
-```
-$ cargo test -p pallet-nft
-
-running 8 tests
-test mock::test_genesis_config_builds ... ok
-test tests::create_collections ... ok
-test mock::__construct_runtime_integrity_test::runtime_integrity_tests ... ok
-test tests::transfer ... ok
-test tests::transfer_when_nft_not_owned ... ok
-test tests::create_collections_fail_when_already_exist ... ok
-test tests::mint ... ok
-test tests::mint_fail_when_exceed ... ok
-
-test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
-
-   Doc-tests pallet-nft
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
-```
-
-##### pallet-nft-market
-
-```
-$ cargo test -p pallet-nft-market
-
-running 7 tests
-test mock::test_genesis_config_builds ... ok
-test mock::__construct_runtime_integrity_test::runtime_integrity_tests ... ok
-test tests::list_nft ... ok
-test tests::place_offer ... ok
-test tests::accept_offer ... ok
-test tests::list_nft_fail_when_not_owner ... ok
-test tests::place_offer_fail_with_wrong_nft ... ok
-
-test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
-
-   Doc-tests pallet-nft-market
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
-```
-
-#### Running
-
-```
-$ ./target/release/solochain-template-node --dev --tmp
-```
-
-### web
-
-```
-$ cd nft_swap_web
-```
-
-#### Installation
-
-```
-$ npm install
-```
-
-#### Running
-
-```
-$ npm run dev
-```
-
-## Substrate Pallet Data Structures and Function Descriptions
-
-### pallet-nft
-
-#### storage
-
-##### NFTCollectionIds
-* Description: Array of NFT collection IDs
-* Type: StorageValue
-* Value: Array of collection_id
-
-##### NFTCollections
-* Description: Information about NFT collections
-* Type: StorageMap
-* Key: collection_id
-* Value: Detailed information about the NFT collection, such as the maximum number of items that can be minted and collection information
-
-##### OwnedNFTs
-* Description: NFTs owned by an account
-* Type: StorageMap
-* Key: User account
-* Value: Array of owned NFT items
-
-##### NFTMetadata
-* Description: Information about NFTs
-* Type: StorageMap
-* Key: NFT item
-* Value: Detailed information about the NFT
-
-##### NFTOwners
-* Description: Owners of the NFT
-* Type: StorageMap
-* Key: NFT item
-* Value: Owner of the NFT
-
-#### Events
-
-##### NFTCollectionCreated
-* Description: NFT collection has been created
-
-##### NFTMinted
-* Description: NFT has been minted successfully
-
-##### NFTTransferred
-* Description: NFT has been transferred
-
-#### Functions
-
-##### create_collection(origin: OriginFor<T>, max_items: u32, metadata: BoundedVec<u8, MaxMetadataLength>)
-* Description: Create an NFT collection
-* Parameters:
-    * max_items: Maximum number of NFT items
-    * metadata: Information about the NFT collection
-
-##### mint_nft(origin: OriginFor<T>, collection_id: H256, metadata: BoundedVec<u8, MaxMetadataLength>)
-* Description: Mint an NFT
-* Parameters:
-    * collection_id: NFT collection
-    * metadata: Information about the NFT
-
-##### transfer_nft(origin: OriginFor<T>, to: T::AccountId, nft_item: NftItem)
-* Description: Transfer an NFT
-* Parameters:
-    * to: Target account
-    * nft_item: NFT item to transfer
-
-### pallet-nft-market
-
-#### storage
-
-##### Listings
-* Description: Listed NFTs and the holders
-* Type: StorageMap
-* key: Listed NFT
-* value: NFT Holder
-
-##### Offers
-* Description: The NFTs needed to be purchased and the offers given
-* Type: StorageMap
-* key: NFT Offered To
-* value: Received Offer
-
-#### Event
-
-##### NftListed
-
-* Description: NFT Listed
-
-##### OfferPlaced
-
-* Description: Offer Made
-
-##### OfferAccepted
-
-* Description: Offer Accepted
-
-#### Function
-
-##### list_nft(origin: OriginFor<T>, nft_item: NftItem)
-* Description: List NFT
-* Parameters:
-    * nft_item: NFT to be listed
-
-##### place_offer(origin: OriginFor<T>, nft_item: NftItem, offer_nft_item: NftItem)
-* Description: Place Offer
-* Parameters:
-    * nft_item: Target NFT
-    * offer_nft_item: NFT offered as a bid
-
-##### accept_offer(origin: OriginFor<T>, nft_item: NftItem, offer_nft_item: NftItem)
-* Description: Accept Offer
-* Parameters:
-    * nft_item: Target NFT
-    * offer_nft_item: NFT offered as a bid
+  To lower the barrier to NFT investment and enhance market liquidity, NFT Swap introduces the revolutionary fractional ownership trading feature. Users can participate in the value growth of an NFT without purchasing the entire asset, simply by acquiring a fractional share. This feature not only opens up opportunities for investors with limited funds but also facilitates asset liquidity and diversified investment for NFT holders. The introduction of fractional ownership trading will undoubtedly significantly boost the activity and appeal of the NFT market.
 
 ## Contribution
 
