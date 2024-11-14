@@ -29,7 +29,7 @@ import { DataTableDemo } from "@/components/ui/data-table";
 //ICON
 import { FaArrowRightToBracket } from "react-icons/fa6";
 
-const PAGE_SIZE = 15; // 每次加载的数据量
+const PAGE_SIZE = 10; // 每次加载的数据量
 
 interface NFTDataProp {
   id: string; // 可能是 string 或 number 类型
